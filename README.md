@@ -9,6 +9,8 @@
 
 An intelligent learning platform powered by Google's Gemini AI that generates comprehensive study materials and provides personalized learning experiences.
 
+[🌐 Visit Live Site](https://mindcrafter.onrender.com)
+
 </div>
 
 ## ✨ Features
