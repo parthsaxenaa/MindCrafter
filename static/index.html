@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindCrafter - Crafting Knowledge with Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animated Background */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(1deg); }
+            66% { transform: translateY(-20px) rotate(-1deg); }
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: particle-float 15s infinite linear;
+        }
+
+        @keyframes particle-float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) translateX(100px); opacity: 0; }
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-left: 1rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-item {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: rgba(102, 126, 234, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .card-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Style for select options */
+        select.form-select option {
+            background: #1a1a2e; /* Dark background */
+            color: #ffffff; /* Light text */
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* File Upload */
+        .file-upload {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .file-upload:hover {
+            border-color: rgba(102, 126, 234, 0.5);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .file-upload.dragover {
+            border-color: rgba(102, 126, 234, 0.8);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .file-upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        /* Calendar Grid */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-header {
+            background: rgba(102, 126, 234, 0.2);
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .calendar-day {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 1rem;
+            min-height: 80px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .calendar-day.has-task::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: #ff6b6b;
+            border-radius: 50%;
+        }
+
+        /* Task List */
+        .task-list {
+            space-y: 1rem;
+        }
+
+        .task-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .task-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .task-date {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            border-radius: 8px;
+        }
+
+        /* Quiz Preview */
+        .quiz-preview {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .question-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .question-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .answer-option {
+            padding: 0.5rem;
+            margin: 0.25rem 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .answer-option.correct {
+            background: rgba(46, 160, 67, 0.2);
+            border-left: 3px solid #2ea043;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .tagline {
+                margin-left: 0;
+                text-align: center;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .calendar-grid {
+                grid-template-columns: repeat(7, 1fr);
+                gap: 1px;
+            }
+
+            .calendar-day {
+                min-height: 60px;
+                padding: 0.5rem;
+                font-size: 0.8rem;
+            }
+
+            .task-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .task-actions {
+                align-self: flex-end;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Landing Page Styles */
+        .landing-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero-section {
+            display: flex;
+            align-items: center;
+            min-height: 80vh;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 4rem;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 3rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1.2rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        .hero-visual {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .floating-cards {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+
+        .feature-card {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            animation: floatCard 6s ease-in-out infinite;
+            width: 120px;
+        }
+
+        .feature-card:nth-child(1) {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .feature-card:nth-child(2) {
+            bottom: 20px;
+            left: 0;
+        }
+
+        .feature-card:nth-child(3) {
+            bottom: 20px;
+            right: 0;
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .features-overview {
+            padding: 6rem 2rem;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .container-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: #ffffff;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .feature-item p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+
+        .cta-section {
+            padding: 6rem 2rem;
+            text-align: center;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem 2rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .footer-logo .logo {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-tagline {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-description {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .footer-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: rgba(102, 126, 234, 0.8);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+        }
+
+        .footer-bottom-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-bottom-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-bottom-links a:hover {
+            color: rgba(102, 126, 234, 0.8);
+        }
+
+        /* Mobile Responsive for Landing and Footer */
+        @media (max-width: 968px) {
+            .hero-section {
+                flex-direction: column;
+                text-align: center;
+                gap: 3rem;
+                padding: 2rem;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .floating-cards {
+                width: 250px;
+                height: 250px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+
+            .footer-bottom-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Success/Error Messages */
+        .message {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .message.success {
+            background: rgba(46, 160, 67, 0.2);
+            border: 1px solid rgba(46, 160, 67, 0.3);
+            color: #4ade80;
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <header class="header">
+        <div class="header-content">
+            <div style="display: flex; align-items: center;">
+                <a href="#" onclick="showLandingPage()"><div class="logo">MindCrafter</div></a>
+                <div class="tagline">Crafting Knowledge with Intelligence</div>
+            </div>
+            <nav class="nav-menu">
+                <div class="nav-item active" data-tab="prompt-generator" onclick="switchToTab('prompt-generator')">Prompt Generator</div>
+                <div class="nav-item" data-tab="task-scheduler" onclick="switchToTab('task-scheduler')">Task Scheduler</div>
+                <div class="nav-item" data-tab="pdf-quiz" onclick="switchToTab('pdf-quiz')">PDF to CBT Quiz</div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Landing Page Section -->
+    <div class="landing-page" id="landing-page">
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Welcome to <span class="gradient-text">MindCrafter</span>
+                </h1>
+                <p class="hero-subtitle">Crafting Knowledge with Intelligence</p>
+                <p class="hero-description">
+                    Transform your learning experience with AI-powered tools designed to help you study smarter, 
+                    organize better, and achieve academic excellence. From intelligent content generation to 
+                    seamless task management and PDF-to-quiz conversion.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="startLearning()">Start Learning</button>
+                    <button class="btn btn-secondary" onclick="exploreFeatures()">Explore Features</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-cards">
+                    <div class="feature-card" style="animation-delay: 0s;">
+                        <div class="card-icon">🧠</div>
+                        <div class="card-title">AI Content</div>
+                    </div>
+                    <div class="feature-card" style="animation-delay: 0.5s;">
+                        <div class="card-icon">📅</div>
+                        <div class="card-title">Smart Schedule</div>
+                    </div>
+                    <div class="feature-card" style="animation-delay: 1s;">
+                        <div class="card-icon">📄</div>
+                        <div class="card-title">PDF to Quiz</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="features-overview">
+            <div class="container-inner">
+                <h2 class="section-title">Powerful Learning Tools</h2>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Intelligent Prompt Generator</h3>
+                        <p>Generate personalized study materials, quizzes, and notes tailored to your learning style and difficulty level.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">⏰</div>
+                        <h3>Smart Task Scheduler</h3>
+                        <p>Organize your study sessions with our intuitive calendar system and never miss important deadlines again.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔄</div>
+                        <h3>PDF to CBT Quiz</h3>
+                        <p>Transform any PDF document into interactive quizzes with customizable question types and difficulty levels.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <div class="container-inner">
+                <h2>Ready to Transform Your Learning?</h2>
+                <p>Join thousands of students who are already learning smarter with MindCrafter</p>
+                <button class="btn btn-primary" onclick="startLearning()">Get Started Now</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="main-app" style="display: none;">
+        <!-- Prompt Generator Tab -->
+        <div class="tab-content active" id="prompt-generator">
+            <div class="card">
+                <h2 class="card-title">🧠 Intelligent Prompt Generator</h2>
+                <p class="card-description">Generate comprehensive study notes, practice questions, and quizzes based on any topic. Our AI-powered system creates personalized learning materials tailored to your needs.</p>
+                
+                <div class="form-group">
+                    <label class="form-label">Topic or Subject</label>
+                    <input type="text" class="form-input" id="topic-input" placeholder="e.g., Machine Learning, World War II, Calculus">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Content Type</label>
+                    <select class="form-select" id="content-type">
+                        <option value="notes">Study Notes</option>
+                        <option value="quiz">Practice Quiz</option>
+                        <option value="flashcards">Flashcards</option>
+                        <option value="summary">Topic Summary</option>
+                        <option value="question">Answer Question</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Difficulty Level</label>
+                    <select class="form-select" id="difficulty-level">
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Additional Instructions (Optional)</label>
+                    <textarea class="form-textarea" id="additional-instructions" placeholder="Specify any particular focus areas, learning objectives, or special requirements..."></textarea>
+                </div>
+
+                <button class="btn" onclick="generateContent()">
+                    <span id="generate-btn-text">Generate Content</span>
+                    <div class="loading" id="generate-loading" style="display: none;"></div>
+                </button>
+
+                <div class="message" id="generate-message"></div>
+
+                <div id="generated-content" style="display: none;">
+                    <div class="quiz-preview">
+                        <h3>Generated Content Preview</h3>
+                        <div id="content-preview"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task Scheduler Tab -->
+        <div class="tab-content" id="task-scheduler">
+            <div class="card">
+                <h2 class="card-title">📅 Smart Task Scheduler</h2>
+                <p class="card-description">Organize your study schedule with our intelligent task management system. Set deadlines, track progress, and never miss an important study session.</p>
+
+                <div style="display: grid; grid-template-columns: 1fr 300px; gap: 2rem; margin-bottom: 2rem;">
+                    <div>
+                        <h3 style="margin-bottom: 1rem;">Calendar View</h3>
+                        <div class="calendar-grid">
+                            <div class="calendar-header">Sun</div>
+                            <div class="calendar-header">Mon</div>
+                            <div class="calendar-header">Tue</div>
+                            <div class="calendar-header">Wed</div>
+                            <div class="calendar-header">Thu</div>
+                            <div class="calendar-header">Fri</div>
+                            <div class="calendar-header">Sat</div>
+                            <!-- Calendar days will be populated by JS -->
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 1rem;">Add New Task</h3>
+                        <div class="form-group">
+                            <label class="form-label">Task Title</label>
+                            <input type="text" class="form-input" id="task-title" placeholder="e.g., Study Calculus">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Due Date</label>
+                            <input type="date" class="form-input" id="task-date">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Priority</label>
+                            <select class="form-select" id="task-priority">
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-secondary" onclick="addTask()">Add Task</button>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="margin-bottom: 1rem;">Upcoming Tasks</h3>
+                    <div class="task-list" id="task-list">
+                        <!-- Tasks will be populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PDF to CBT Quiz Tab -->
+        <div class="tab-content" id="pdf-quiz">
+            <div class="card">
+                <h2 class="card-title">📄 PDF to CBT Quiz Converter</h2>
+                <p class="card-description">Upload your study materials in PDF format and automatically generate computer-based training (CBT) quizzes. Perfect for creating practice exams from textbooks, lecture notes, or research papers.</p>
+
+                <div class="file-upload" id="pdf-upload" onclick="document.getElementById('pdf-file').click()">
+                    <div class="file-upload-icon">📁</div>
+                    <h3>Upload PDF Document</h3>
+                    <p>Click here or drag and drop your PDF file</p>
+                    <p style="font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 0.5rem;">Supported formats: PDF (Max 10MB)</p>
+                    <input type="file" id="pdf-file" accept=".pdf" onchange="handleFileUpload(event)">
+                </div>
+
+                <div class="message" id="upload-message"></div>
+
+                <div id="quiz-settings" style="display: none; margin-top: 2rem;">
+                    <h3 style="margin-bottom: 1rem;">Quiz Configuration</h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">Number of Questions</label>
+                            <select class="form-select" id="question-count">
+                                <option value="5">5 Questions</option>
+                                <option value="10" selected>10 Questions</option>
+                                <option value="15">15 Questions</option>
+                                <option value="20">20 Questions</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Question Type</label>
+                            <select class="form-select" id="question-type">
+                                <option value="multiple-choice">Multiple Choice</option>
+                                <option value="true-false">True/False</option>
+                                <option value="mixed">Mixed Types</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">Time Limit (minutes)</label>
+                            <input type="number" class="form-input" id="time-limit" value="10" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Focus Areas (Optional)</label>
+                            <textarea class="form-textarea" id="focus-areas" placeholder="Specify particular topics or chapters to focus on..."></textarea>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn" onclick="generateQuiz()">
+                            <span id="quiz-btn-text">Generate Quiz</span>
+                            <div class="loading" id="quiz-loading" style="display: none;"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <div class="logo">MindCrafter</div>
+                    <p class="footer-tagline">Crafting Knowledge with Intelligence</p>
+                </div>
+                <div class="footer-description">
+                    Empowering students and educators with AI-driven learning tools that make studying more effective, 
+                    organized, and engaging. Transform the way you learn with intelligent content generation and smart study management.
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4 class="footer-title">Features</h4>
+                <ul class="footer-links">
+                    <li><a href="#" onclick="switchToTab('prompt-generator')">Prompt Generator</a></li>
+                    <li><a href="#" onclick="switchToTab('task-scheduler')">Task Scheduler</a></li>
+                    <li><a href="#" onclick="switchToTab('pdf-quiz')">PDF to Quiz</a></li>
+                    <li><a href="#">Study Analytics</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4 class="footer-title">Resources</h4>
+                <ul class="footer-links">
+                    <li><a href="Study Guides.html">Study Guides</a></li>
+                    <li><a href="#">Tutorial Videos</a></li>
+                    <li><a href="#">Best Practices</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4 class="footer-title">Connect</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Contact Support</a></li>
+                    <li><a href="#">Community</a></li>
+                    <li><a href="#">Feedback</a></li>
+                    <li><a href="#">Updates</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <p>&copy; 2024 MindCrafter. All rights reserved. Built for the future of learning.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables
+        let tasks = [];
+        let currentQuiz = [];
+        let currentDate = new Date();
+        const BACKEND_URL = '/api/gemini/generate'; // Backend API endpoint
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeParticles();
+            generateCalendar();
+            initializeTabSwitching();
+            initializeDragAndDrop();
+            loadSampleTasks();
+            
+            // Show landing page by default
+            showLandingPage();
+        });
+
+        // Landing page functions
+        function showLandingPage() {
+            document.getElementById('landing-page').style.display = 'block';
+            document.getElementById('main-app').style.display = 'none';
+        }
+
+        function showMainApp() {
+            document.getElementById('landing-page').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+        }
+
+        function startLearning() {
+            showMainApp();
+            // Activate first tab
+            document.querySelector('[data-tab="prompt-generator"]').click();
+        }
+
+        function exploreFeatures() {
+            showMainApp();
+        }
+
+        function switchToTab(tabName) {
+            showMainApp();
+            document.querySelector(`[data-tab="${tabName}"]`).click();
+        }
+
+        // Particle animation
+        function initializeParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Tab switching functionality
+        function initializeTabSwitching() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const targetTab = item.getAttribute('data-tab');
+
+                    // Remove active class from all nav items and tab contents
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    tabContents.forEach(tab => tab.classList.remove('active'));
+
+                    // Add active class to clicked nav item and corresponding tab content
+                    item.classList.add('active');
+                    document.getElementById(targetTab).classList.add('active');
+                });
+            });
+        }
+
+        // Drag and drop functionality
+        function initializeDragAndDrop() {
+            const uploadArea = document.getElementById('pdf-upload');
+
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFileUpload({ target: { files } });
+                }
+            });
+        }
+
+        // Generate calendar
+        function generateCalendar() {
+            const calendarGrid = document.querySelector('.calendar-grid');
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            // Clear existing calendar days
+            const existingDays = calendarGrid.querySelectorAll('.calendar-day');
+            existingDays.forEach(day => day.remove());
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Add empty cells for days before the first day of the month
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day';
+                calendarGrid.appendChild(emptyDay);
+            }
+
+            // Add days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                
+                // Check if this day has tasks
+                const dayTasks = tasks.filter(task => {
+                    const taskDate = new Date(task.date);
+                    return taskDate.getDate() === day && 
+                           taskDate.getMonth() === month && 
+                           taskDate.getFullYear() === year;
+                });
+
+                if (dayTasks.length > 0) {
+                    dayElement.classList.add('has-task');
+                }
+
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+
+        // Content generation with Backend API
+        async function generateContent() {
+            const topic = document.getElementById('topic-input').value;
+            const contentType = document.getElementById('content-type').value;
+            const difficulty = document.getElementById('difficulty-level').value;
+            const instructions = document.getElementById('additional-instructions').value;
+
+            if (!topic.trim()) {
+                showMessage('generate-message', 'Please enter a topic or subject.', 'error');
+                return;
+            }
+
+            // Show loading state
+            const btnText = document.getElementById('generate-btn-text');
+            const loading = document.getElementById('generate-loading');
+            btnText.style.display = 'none';
+            loading.style.display = 'inline-block';
+
+            try {
+                let generatedContent;
+                
+                // Use Backend API for question answering
+                if (contentType === 'question') {
+                    generatedContent = await callBackendAPI(topic, instructions, difficulty);
+                } else {
+                    // Use simulated content for other types (or you can extend Backend API usage here too)
+                    generatedContent = generateSampleContent(topic, contentType, difficulty);
+                }
+                
+                displayGeneratedContent(generatedContent, contentType);
+                showMessage('generate-message', 'Content generated successfully!', 'success');
+            } catch (error) {
+                console.error('Error generating content:', error);
+                showMessage('generate-message', 'Error generating content: ' + error.message, 'error');
+            } finally {
+                // Hide loading state
+                btnText.style.display = 'inline';
+                loading.style.display = 'none';
+            }
+        }
+
+        // Call Backend API
+        async function callBackendAPI(question, context, difficulty) {
+            try {
+                const response = await fetch(BACKEND_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        question: question,
+                        context: context,
+                        difficulty: difficulty
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to get response from backend');
+                }
+
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.error || 'Unknown error occurred');
+                }
+                
+                return {
+                    type: 'question',
+                    content: `
+                        <h4>Answer to: ${question}</h4>
+                        <div style="white-space: pre-wrap;">${data.response}</div>
+                    `
+                };
+            } catch (error) {
+                console.error('Backend API error:', error);
+                throw new Error('Failed to get response: ' + error.message);
+            }
+        }
+
+        function generateSampleContent(topic, type, difficulty) {
+            const sampleQuestions = [
+                {    
+                    type: 'multiple-choice',
+                    question: 'What is the primary purpose of machine learning?',
+                    options: [
+                        'To replace human intelligence completely',
+                        'To enable computers to learn from data without explicit programming',
+                        'To create robots that can think like humans',
+                        'To solve mathematical equations faster'
+                    ],
+                    correct: 1
+                },
+                {
+                    question: `Which of the following best describes ${topic}?`,
+                    options: [
+                        `A simple concept`,
+                        `A comprehensive field of study`,
+                        `An outdated theory`,
+                        `A practical application`
+                    ],
+                    correct: 1
+                },
+                {
+                    question: `How does ${topic} relate to modern applications?`,
+                    options: [
+                        `It has no modern relevance`,
+                        `It forms the foundation for current practices`,
+                        `It's only used in academic settings`,
+                        `It's being replaced by newer methods`
+                    ],
+                    correct: 1
+                }
+            ];
+
+            if (type === 'notes') {
+                return {
+                    type: 'notes',
+                    content: `
+                        <h4>Study Notes: ${topic}</h4>
+                        <p><strong>Overview:</strong> ${topic} is a fundamental concept that plays a crucial role in its field of study.</p>
+                        <p><strong>Key Points:</strong></p>
+                        <ul>
+                            <li>Core principles and foundations</li>
+                            <li>Historical development and evolution</li>
+                            <li>Modern applications and relevance</li>
+                            <li>Future trends and developments</li>
+                        </ul>
+                        <p><strong>Important Concepts:</strong> Understanding ${topic} requires grasping its fundamental principles and practical applications.</p>
+                    `
+                };
+            } else if (type === 'quiz') {
+                return {
+                    type: 'quiz',
+                    content: `
+                        <h4>Practice Quiz: ${topic}</h4>
+                        <div class="question-item">
+                            <p class="question-text">1. ${sampleQuestions[0].question}</p>
+                            ${sampleQuestions[0].options.map((option, index) => 
+                                `<div class="answer-option ${index === sampleQuestions[0].correct ? 'correct' : ''}">${option}</div>`
+                            ).join('')}
+                        </div>
+                        <div class="question-item">
+                            <p class="question-text">2. ${sampleQuestions[1].question}</p>
+                            ${sampleQuestions[1].options.map((option, index) => 
+                                `<div class="answer-option ${index === sampleQuestions[1].correct ? 'correct' : ''}">${option}</div>`
+                            ).join('')}
+                        </div>
+                        <div class="question-item">
+                            <p class="question-text">3. ${sampleQuestions[2].question}</p>
+                            ${sampleQuestions[2].options.map((option, index) => 
+                                `<div class="answer-option ${index === sampleQuestions[2].correct ? 'correct' : ''}">${option}</div>`
+                            ).join('')}
+                        </div>
+                    `
+                };
+            } else if (type === 'flashcards') {
+                return {
+                    type: 'flashcards',
+                    content: `
+                        <h4>Flashcards: ${topic}</h4>
+                        <div style="margin-top: 1rem;">
+                            <div style="border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+                                <p style="font-weight: 600; margin-bottom: 0.5rem;">Front: What is ${topic}?</p>
+                                <p style="color: rgba(255, 255, 255, 0.7);">Back: ${topic} is a fundamental concept in its field that involves systematic approaches to understanding and applying knowledge.</p>
+                            </div>
+                            <div style="border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+                                <p style="font-weight: 600; margin-bottom: 0.5rem;">Front: Key components of ${topic}</p>
+                                <p style="color: rgba(255, 255, 255, 0.7);">Back: The key components include theoretical foundations, practical applications, and interdisciplinary connections.</p>
+                            </div>
+                            <div style="border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1rem;">
+                                <p style="font-weight: 600; margin-bottom: 0.5rem;">Front: Why is ${topic} important?</p>
+                                <p style="color: rgba(255, 255, 255, 0.7);">Back: ${topic} is important because it provides essential frameworks for solving problems and advancing knowledge in its domain.</p>
+                            </div>
+                        </div>
+                    `
+                };
+            } else if (type === 'summary') {
+                return {
+                    type: 'summary',
+                    content: `
+                        <h4>Topic Summary: ${topic}</h4>
+                        <p style="margin-bottom: 1rem;">${topic} encompasses a range of concepts, methodologies, and applications that have evolved over time. At its core, it represents a systematic approach to understanding and solving problems within its domain.</p>
+                        <p style="margin-bottom: 1rem;">The historical development of ${topic} can be traced through several key phases, each marked by significant advancements and paradigm shifts. Early pioneers established foundational principles that continue to influence current practices.</p>
+                        <p>Modern applications of ${topic} span various sectors, demonstrating its versatility and ongoing relevance. As technology and knowledge continue to advance, ${topic} is likely to evolve further, opening new possibilities and addressing emerging challenges.</p>
+                    `
+                };
+            }
+            
+            // Default fallback
+            return {
+                type: 'generic',
+                content: `<p>Generated content about ${topic} (${type}, ${difficulty} level)</p>`
+            };
+        }
+
+        function displayGeneratedContent(content, type) {
+            const contentPreview = document.getElementById('content-preview');
+            contentPreview.innerHTML = content.content;
+            document.getElementById('generated-content').style.display = 'block';
+        }
+
+        // Task management
+        function addTask() {
+            const title = document.getElementById('task-title').value;
+            const date = document.getElementById('task-date').value;
+            const priority = document.getElementById('task-priority').value;
+
+            if (!title.trim() || !date) {
+                alert('Please enter both task title and due date.');
+                return;
+            }
+
+            const newTask = {
+                id: Date.now(),
+                title: title,
+                date: date,
+                priority: priority,
+                completed: false
+            };
+
+            tasks.push(newTask);
+            updateTaskList();
+            generateCalendar();
+
+            // Clear form
+            document.getElementById('task-title').value = '';
+            document.getElementById('task-date').value = '';
+        }
+
+        function updateTaskList() {
+            const taskList = document.getElementById('task-list');
+            taskList.innerHTML = '';
+
+            // Sort tasks by date
+            const sortedTasks = [...tasks].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            if (sortedTasks.length === 0) {
+                taskList.innerHTML = '<p style="color: rgba(255, 255, 255, 0.5);">No tasks scheduled. Add your first task above.</p>';
+                return;
+            }
+
+            sortedTasks.forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.className = 'task-item';
+                taskElement.innerHTML = `
+                    <div class="task-content">
+                        <div class="task-title">${task.title}</div>
+                        <div class="task-date">${formatDate(task.date)} • ${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)} Priority</div>
+                    </div>
+                    <div class="task-actions">
+                        <button class="btn btn-secondary btn-small" onclick="toggleTaskCompletion(${task.id})">${task.completed ? 'Reopen' : 'Complete'}</button>
+                        <button class="btn btn-secondary btn-small" onclick="deleteTask(${task.id})">Delete</button>
+                    </div>
+                `;
+
+                if (task.completed) {
+                    taskElement.style.opacity = '0.6';
+                }
+
+                taskList.appendChild(taskElement);
+            });
+        }
+
+        function toggleTaskCompletion(id) {
+            const taskIndex = tasks.findIndex(task => task.id === id);
+            if (taskIndex !== -1) {
+                tasks[taskIndex].completed = !tasks[taskIndex].completed;
+                updateTaskList();
+            }
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(task => task.id !== id);
+            updateTaskList();
+            generateCalendar();
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+        }
+
+        function loadSampleTasks() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const nextWeek = new Date(today);
+            nextWeek.setDate(nextWeek.getDate() + 7);
+
+            tasks = [
+                {
+                    id: 1,
+                    title: 'Review Machine Learning Concepts',
+                    date: today.toISOString().split('T')[0],
+                    priority: 'high',
+                    completed: false
+                },
+                {
+                    id: 2,
+                    title: 'Complete Statistics Assignment',
+                    date: tomorrow.toISOString().split('T')[0],
+                    priority: 'medium',
+                    completed: false
+                },
+                {
+                    id: 3,
+                    title: 'Prepare for Final Exam',
+                    date: nextWeek.toISOString().split('T')[0],
+                    priority: 'high',
+                    completed: false
+                }
+            ];
+
+            updateTaskList();
+            generateCalendar();
+        }
+
+        // PDF and Quiz functionality
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.type !== 'application/pdf') {
+                showMessage('upload-message', 'Please upload a PDF file only.', 'error');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                showMessage('upload-message', 'File size must be less than 10MB.', 'error');
+                return;
+            }
+
+            showMessage('upload-message', `Successfully uploaded: ${file.name}`, 'success');
+            document.getElementById('quiz-settings').style.display = 'block';
+        }
+
+        function generateQuiz() {
+            const questionCount = parseInt(document.getElementById('question-count').value);
+            const questionType = document.getElementById('question-type').value;
+            const focusAreas = document.getElementById('focus-areas').value;
+            const timeLimitMinutes = parseInt(document.getElementById('time-limit').value);
+
+            if (!timeLimitMinutes || timeLimitMinutes <= 0) {
+                showMessage('upload-message', 'Please enter a valid time limit in minutes.', 'error');
+                return;
+            }
+
+            // Show loading state
+            const btnText = document.getElementById('quiz-btn-text');
+            const loading = document.getElementById('quiz-loading');
+            btnText.style.display = 'none';
+            loading.style.display = 'inline-block';
+
+            // Simulate quiz generation
+            setTimeout(() => {
+                currentQuiz = generateSampleQuiz(questionCount, questionType);
+                
+                // Store quiz data and time limit in local storage and redirect
+                localStorage.setItem('currentQuizData', JSON.stringify(currentQuiz));
+                localStorage.setItem('quizTimeLimit', timeLimitMinutes * 60);
+                window.location.href = 'quiz.html'; // Redirect to the quiz page
+                
+                // Hide loading state (this might not be reached due to redirect)
+                btnText.style.display = 'inline';
+                loading.style.display = 'none';
+                
+            }, 1000); // Reduced timeout for quicker redirection
+        }
+
+        function generateSampleQuiz(count, type) {
+            const sampleQuestions = [
+                {    
+                    type: 'multiple-choice',
+                    question: 'What is the primary purpose of machine learning?',
+                    options: [
+                        'To replace human intelligence completely',
+                        'To enable computers to learn from data without explicit programming',
+                        'To create robots that can think like humans',
+                        'To solve mathematical equations faster'
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'true-false',
+                    question: 'Supervised learning requires labeled training data.',
+                    options: ['True', 'False'],
+                    correct: 0
+                },
+                {}
+            ];
+
+            // Filter by type if specified
+            let filteredQuestions = sampleQuestions;
+            if (type === 'multiple-choice') {
+                filteredQuestions = sampleQuestions.filter(q => q.type === 'multiple-choice');
+            } else if (type === 'true-false') {
+                filteredQuestions = sampleQuestions.filter(q => q.type === 'true-false');
+            }
+
+            // Shuffle and take required count
+            const shuffled = filteredQuestions.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, Math.min(count, shuffled.length));
+        }
+
+        // Utility functions
+        function showMessage(elementId, message, type) {
+            const messageElement = document.getElementById(elementId);
+            messageElement.textContent = message;
+            messageElement.className = `message ${type}`;
+            messageElement.style.display = 'block';
+
+            setTimeout(() => {
+                messageElement.style.display = 'none';
+            }, 5000);
+        }
+
+        // Mobile menu toggle (if needed)
+        function toggleMobileMenu() {
+            const navMenu = document.querySelector('.nav-menu');
+            navMenu.classList.toggle('mobile-active');
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case '1':
+                        e.preventDefault();
+                        document.querySelector('[data-tab="prompt-generator"]').click();
+                        break;
+                    case '2':
+                        e.preventDefault();
+                        document.querySelector('[data-tab="task-scheduler"]').click();
+                        break;
+                    case '3':
+                        e.preventDefault();
+                        document.querySelector('[data-tab="pdf-quiz"]').click();
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

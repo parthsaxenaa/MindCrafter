@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindCrafter Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> <!-- Assuming your styles are in a separate file or copy from index.html -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding-top: 2rem; /* Add padding to account for potential fixed header if copied */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .quiz-area {
+            margin-top: 2rem;
+        }
+
+        .question-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .question-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .option-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .option-item.selected {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .option-item.correct-answer {
+            background: rgba(46, 160, 67, 0.2);
+            border: 1px solid #2ea043;
+        }
+
+         .option-item.wrong-answer {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .results-area {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: none; /* Initially hidden */
+        }
+
+        .results-area h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .score {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #4ade80; /* Green for score */
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+             display: block;
+            width: 100%;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .question-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .question-navigation button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .question-navigation .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .question-navigation .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+         .question-navigation .nav-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .question-status-btns {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .question-status-btns button {
+            background: rgba(102, 126, 234, 0.15);
+            color: #ffffff;
+        }
+
+        .question-status-btns button.marked {
+            background: rgba(255, 193, 7, 0.3);
+            border-color: #ffc107;
+        }
+
+         .question-status-btns button.done {
+            background: rgba(46, 160, 67, 0.3);
+            border-color: #2ea043;
+        }
+
+         .question-status-btns button:hover {
+            background: rgba(102, 126, 234, 0.3);
+        }
+
+        .progress-indicator {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="background"></div> <!-- Assuming background styles are in style.css or add them here -->
+
+    <div class="container">
+        <div class="card">
+            <h1 class="card-title">Quiz Time!</h1>
+
+            <div class="timer" id="quiz-timer">Time Left: --:--</div>
+            
+            <div class="progress-indicator" id="progress-indicator">Question 1 of --</div>
+
+            <div class="quiz-area" id="quiz-questions">
+                <!-- Single quiz question will be loaded here by JavaScript -->
+                <p>Loading quiz...</p>
+            </div>
+
+            <div class="question-navigation">
+                <button id="prev-question" class="nav-btn">Previous</button>
+                <div class="question-status-btns">
+                    <button id="mark-review">Mark for Review</button>
+                    <button id="mark-done">Mark as Done</button>
+                </div>
+                <button id="next-question" class="nav-btn">Next</button>
+            </div>
+
+            <button class="btn" id="submit-quiz" style="display: none;">Submit Quiz</button>
+
+            <div class="results-area" id="quiz-results">
+                <h3>Quiz Results</h3>
+                <div class="score" id="final-score">Score: --/--</div>
+                <!-- Individual question results can be shown here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let quizData = [];
+        let timeLimitSeconds = 0;
+        let timerInterval;
+        let userAnswers = {}; // { questionIndex: selectedOptionIndex }
+        let questionStatuses = {}; // { questionIndex: 'unattempted' | 'attempted' | 'marked' | 'done' }
+        let currentQuestionIndex = 0;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadQuiz();
+        });
+
+        function loadQuiz() {
+            const storedQuiz = localStorage.getItem('currentQuizData');
+            const storedTime = localStorage.getItem('quizTimeLimit');
+
+            if (storedQuiz) {
+                quizData = JSON.parse(storedQuiz);
+                if (storedTime) {
+                    timeLimitSeconds = parseInt(storedTime);
+                } else {
+                    timeLimitSeconds = 600; // Default to 10 minutes if not found
+                }
+
+                // Initialize question statuses
+                quizData.forEach((_, index) => {
+                    questionStatuses[index] = 'unattempted';
+                });
+
+                displayQuestion(currentQuestionIndex);
+                startTimer();
+                document.getElementById('submit-quiz').style.display = 'block';
+                setupNavigationButtons();
+                updateProgressIndicator();
+
+            } else {
+                document.getElementById('quiz-questions').innerHTML = '<p>No quiz data found. Please generate a quiz from the main page.</p>';
+                document.getElementById('quiz-timer').style.display = 'none';
+                document.getElementById('progress-indicator').style.display = 'none';
+                document.querySelector('.question-navigation').style.display = 'none';
+            }
+        }
+
+        function displayQuestion(index) {
+            const quizContainer = document.getElementById('quiz-questions');
+            quizContainer.innerHTML = ''; // Clear previous question
+
+            if (index < 0 || index >= quizData.length) {
+                quizContainer.innerHTML = '<p>Question not found.</p>';
+                return;
+            }
+
+            const q = quizData[index];
+            const questionElement = document.createElement('div');
+            questionElement.className = 'question-item';
+            questionElement.innerHTML = `
+                <div class="question-text"><strong>Question ${index + 1}:</strong> ${q.question}</div>
+                <ul class="options-list">
+                    ${q.options.map((option, optIndex) => 
+                        `<li class="option-item" 
+                             data-question-index="${index}" 
+                             data-option-index="${optIndex}" 
+                             onclick="selectAnswer(this, ${index}, ${optIndex})"
+                             class="option-item ${userAnswers[index] === optIndex ? 'selected' : ''}">
+                            ${q.type === 'true-false' ? '' : String.fromCharCode(65 + optIndex) + '. '}${option}
+                         </li>`
+                    ).join('')}
+                </ul>
+            `;
+            quizContainer.appendChild(questionElement);
+
+            updateNavigationButtons();
+            updateStatusButtons(index);
+            updateProgressIndicator();
+        }
+
+        function selectAnswer(element, questionIndex, optionIndex) {
+            // Remove 'selected' class from siblings
+            const siblings = element.parentElement.querySelectorAll('.option-item');
+            siblings.forEach(sib => sib.classList.remove('selected'));
+
+            // Add 'selected' class to the clicked element
+            element.classList.add('selected');
+
+            // Store the user's answer
+            userAnswers[questionIndex] = optionIndex;
+
+            // Update question status if it was unattempted
+            if (questionStatuses[questionIndex] === 'unattempted') {
+                questionStatuses[questionIndex] = 'attempted';
+                updateStatusButtons(questionIndex);
+            }
+        }
+
+        function startTimer() {
+            const timerElement = document.getElementById('quiz-timer');
+            
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(timeLimitSeconds / 60);
+                const seconds = timeLimitSeconds % 60;
+                timerElement.textContent = `Time Left: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                if (timeLimitSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    submitQuiz(); // Auto-submit when time is up
+                } else {
+                    timeLimitSeconds--;
+                }
+            }, 1000);
+        }
+
+        document.getElementById('submit-quiz').addEventListener('click', submitQuiz);
+
+        function setupNavigationButtons() {
+            document.getElementById('prev-question').addEventListener('click', () => navigateQuestions(-1));
+            document.getElementById('next-question').addEventListener('click', () => navigateQuestions(1));
+            document.getElementById('mark-review').addEventListener('click', toggleMarkForReview);
+            document.getElementById('mark-done').addEventListener('click', markAsDone);
+        }
+
+        function navigateQuestions(direction) {
+            // Update status of the current question before navigating
+            if (questionStatuses[currentQuestionIndex] === 'unattempted' && userAnswers[currentQuestionIndex] !== undefined) {
+                 questionStatuses[currentQuestionIndex] = 'attempted';
+            }
+             if (questionStatuses[currentQuestionIndex] === 'attempted' && userAnswers[currentQuestionIndex] === undefined) {
+                 questionStatuses[currentQuestionIndex] = 'unattempted';
+            }
+
+            const newIndex = currentQuestionIndex + direction;
+            if (newIndex >= 0 && newIndex < quizData.length) {
+                currentQuestionIndex = newIndex;
+                displayQuestion(currentQuestionIndex);
+            } else if (newIndex === quizData.length) {
+                // Reached the end, maybe show submit button prominently or a summary
+                submitQuiz(); // Auto-submit at the end for now
+            }
+        }
+
+        function updateNavigationButtons() {
+            document.getElementById('prev-question').disabled = currentQuestionIndex === 0;
+            document.getElementById('next-question').disabled = currentQuestionIndex === quizData.length - 1;
+        }
+
+        function toggleMarkForReview() {
+            const currentStatus = questionStatuses[currentQuestionIndex];
+            if (currentStatus === 'marked') {
+                questionStatuses[currentQuestionIndex] = userAnswers[currentQuestionIndex] !== undefined ? 'attempted' : 'unattempted';
+            } else {
+                questionStatuses[currentQuestionIndex] = 'marked';
+            }
+            updateStatusButtons(currentQuestionIndex);
+        }
+
+        function markAsDone() {
+             if (userAnswers[currentQuestionIndex] !== undefined) {
+                questionStatuses[currentQuestionIndex] = 'done';
+                 updateStatusButtons(currentQuestionIndex);
+                navigateQuestions(1); // Move to the next question
+             } else {
+                 alert('Please select an answer before marking as done.');
+             }
+        }
+
+        function updateStatusButtons(index) {
+            const markReviewBtn = document.getElementById('mark-review');
+            const markDoneBtn = document.getElementById('mark-done');
+            
+            markReviewBtn.classList.remove('marked', 'done');
+            markDoneBtn.classList.remove('marked', 'done'); // Should not have these classes, but good to clean
+
+            if (questionStatuses[index] === 'marked') {
+                markReviewBtn.classList.add('marked');
+            } else if (questionStatuses[index] === 'done') {
+                markDoneBtn.classList.add('done');
+            }
+        }
+
+        function updateProgressIndicator() {
+            const indicator = document.getElementById('progress-indicator');
+            indicator.textContent = `Question ${currentQuestionIndex + 1} of ${quizData.length}`;
+        }
+
+        function submitQuiz() {
+            clearInterval(timerInterval); // Stop the timer
+            document.getElementById('submit-quiz').style.display = 'none'; // Hide submit button
+            document.querySelector('.question-navigation').style.display = 'none'; // Hide navigation
+            document.getElementById('progress-indicator').style.display = 'none'; // Hide progress
+
+            let correctCount = 0;
+            const quizQuestionsDiv = document.getElementById('quiz-questions');
+
+            // Clear the current question display to show all results
+            quizQuestionsDiv.innerHTML = '';
+
+            quizData.forEach((q, index) => {
+                const userAnswerIndex = userAnswers[index];
+                const correctAnswerIndex = q.correct;
+
+                const resultElement = document.createElement('div');
+                resultElement.className = 'question-item'; // Reuse question-item class for styling
+                resultElement.innerHTML = `
+                    <div class="question-text"><strong>Question ${index + 1}:</strong> ${q.question}</div>
+                    <ul class="options-list">
+                        ${q.options.map((option, optIndex) => 
+                            `<li class="option-item 
+                                ${optIndex === correctAnswerIndex ? 'correct-answer' : ''}
+                                ${optIndex === userAnswerIndex && userAnswerIndex !== correctAnswerIndex ? 'wrong-answer' : ''}
+                                ${optIndex === userAnswerIndex && userAnswerIndex === correctAnswerIndex ? 'selected' : ''}
+                            ">
+                               ${q.type === 'true-false' ? '' : String.fromCharCode(65 + optIndex) + '. '}${option}
+                            </li>`
+                        ).join('')}
+                    </ul>
+                `;
+                 quizQuestionsDiv.appendChild(resultElement);
+
+                if (userAnswerIndex === correctAnswerIndex) {
+                     correctCount++;
+                 }
+            });
+
+            // Display results
+            const resultsArea = document.getElementById('quiz-results');
+            document.getElementById('final-score').textContent = `Score: ${correctCount}/${quizData.length}`;
+            resultsArea.style.display = 'block';
+            document.getElementById('quiz-timer').textContent = "Quiz Ended";
+        }
+
+    </script>
+</body>
+</html> 
